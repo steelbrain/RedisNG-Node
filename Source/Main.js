@@ -3,7 +3,6 @@
 var
   Socket = require('net').Socket,
   EventEmitter = require('events').EventEmitter,
-  Promise = require('a-promise'),
   RedisProto = require('redis-proto'),
   Commands = require('../Dist/Commands.js');
 class Redis extends EventEmitter{

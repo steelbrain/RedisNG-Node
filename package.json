@@ -4,7 +4,6 @@
   "description": "A tiny but fully functional Promise based Redis Client for NodeJS",
   "main": "Main.js",
   "dependencies": {
-    "a-promise": "latest",
     "redis-proto": "latest"
   },
   "devDependencies": {},
