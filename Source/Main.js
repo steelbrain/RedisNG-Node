@@ -51,18 +51,19 @@ Commands.forEach(function(Entry){
     }
     let Encoded = RedisProto.Encode(arguments);
     let Me = this;
-    let MyPromise = new Promise(function(Resolve, Reject){
-      Me.Socket.write(Encoded + "\r\n", 'utf8', function(){
-        Me.Expecting = [Resolve, Reject];
-      });
-    });
     if(Callback === null){
-      return MyPromise;
+      return new Promise(function(Resolve, Reject){
+        Me.Socket.write(Encoded + "\r\n", 'utf8', function(){
+          Me.Expecting = [Resolve, Reject];
+        });
+      });
     } else {
-      MyPromise.then(function(){
-        Callback(null, arguments);
-      }, function(Error){
-        Callback(Error, null);
+      Me.Socket.write(Encoded + "\r\n", 'utf8', function(){
+        Me.Expecting = [function(){
+          Callback(null, arguments);
+        }, function(Error){
+          Callback(Error, null);
+        }];
       });
     }
   };
