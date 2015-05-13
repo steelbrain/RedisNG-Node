@@ -1,0 +1,29 @@
+{
+  "name": "redis-promise",
+  "version": "0.0.1",
+  "description": "A tiny but fully functional Promise based Redis Client for NodeJS",
+  "main": "Main.js",
+  "dependencies": {
+    "a-promise": "^0.1.2",
+    "redis-proto": "^0.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steelbrain/Redis-Promise.git"
+  },
+  "keywords": [
+    "redis",
+    "promise",
+    "es6"
+  ],
+  "author": "steelbrain",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/steelbrain/Redis-Promise/issues"
+  },
+  "homepage": "https://github.com/steelbrain/Redis-Promise#readme"
+}
