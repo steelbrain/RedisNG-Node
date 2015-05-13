@@ -34,13 +34,21 @@ class Redis extends EventEmitter{
     });
     this.Expecting = [];
   }
-  connect(Host, Port){
+  connect(Host, Port, Callback){
     Host = Host || '127.0.0.1';
     Port = Port || 6379;
     let Me = this;
-    return new Promise(function(Resolve){
-      Me.Socket.connect(Port, Host, Resolve);
-    });
+    if(typeof Callback === 'function'){
+      try {
+        Me.Socket.connect(Port, Host, Callback);
+      } catch(err){
+        Callback(err);
+      }
+    } else {
+      return new Promise(function(Resolve){
+        Me.Socket.connect(Port, Host, Resolve);
+      });
+    }
   }
   ref(){ this.Socket.ref() }
   unref(){ this.Socket.unref() }
