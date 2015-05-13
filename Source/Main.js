@@ -13,22 +13,27 @@ class Redis extends EventEmitter{
     let Me = this;
     this.Socket = new Socket();
     this.Socket.on('data', function(Buffer){
-      try {
-        Buffer = RedisProto.Decode(Buffer.toString());
-        if(Me.Expecting) Me.Expecting[0](Buffer);
-        else if(Buffer.length === 3 && Buffer[0] === 'message'){
-          Me.emit('message', Buffer[1], Buffer[2]);
-          Me.emit('message:' + Buffer[1], Buffer[2]);
+      Buffer = RedisProto.DecodeGen(Buffer.toString());
+      let BufferValue = [];
+      while(true){
+        try {
+          let Entry = Buffer.next();
+          if(Entry.done) break;
+          BufferValue = Entry.value;
+        } catch (err){
+          err = new Error(err.message);
+          if(Me.Expecting.length) Me.Expecting.shift()[1](err);
+          else Me.emit('error', err);
+          continue ;
         }
-      } catch (err){
-        // Assign new Trace
-        err = new Error(err.message);
-        if(Me.Expecting) Me.Expecting[1](err);
-        else Me.emit('error', err);
+        if(Me.Expecting.length) Me.Expecting.shift()[0](BufferValue);
+        else if(BufferValue.length === 3 && BufferValue[0] === 'message'){
+          Me.emit('message', BufferValue[1], BufferValue[2]);
+          Me.emit('message:' + BufferValue[1], BufferValue[2]);
+        }
       }
-      Me.Expecting = null;
     });
-    this.Expecting = null;
+    this.Expecting = [];
   }
   connect(Host, Port){
     Host = Host || '127.0.0.1';
@@ -54,16 +59,17 @@ Commands.forEach(function(Entry){
     if(Callback === null){
       return new Promise(function(Resolve, Reject){
         Me.Socket.write(Encoded + "\r\n", 'utf8', function(){
-          Me.Expecting = [Resolve, Reject];
+          Me.Expecting.push([Resolve, Reject]);
         });
       });
     } else {
       Me.Socket.write(Encoded + "\r\n", 'utf8', function(){
-        Me.Expecting = [function(){
-          Callback(null, arguments);
+        Me.Expecting.push([function(){
+          Array.prototype.unshift.call(arguments, null);
+          Callback.apply(null, arguments);
         }, function(Error){
           Callback(Error, null);
-        }];
+        }]);
       });
     }
   };
