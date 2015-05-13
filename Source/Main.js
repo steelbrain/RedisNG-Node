@@ -62,4 +62,7 @@ Commands.forEach(function(Entry){
   Redis.prototype[Entry] = Execute;
   Redis.prototype[Entry.toLowerCase()] = Execute;
 });
+
+Redis.prototype.end = Redis.prototype.close;
+
 module.exports = Redis;
