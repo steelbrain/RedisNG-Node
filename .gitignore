@@ -1,1 +1,4 @@
 .idea
+/Dist/
+/Source/Commands.js
+node_modules
