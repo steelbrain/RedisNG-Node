@@ -38,31 +38,37 @@ class Redis extends EventEmitter{
       Me.Socket.connect(Port, Host, Resolve);
     });
   }
-  ref(){
-    this.Socket.ref();
-  }
-  unref(){
-    this.Socket.unref();
-  }
-  close(){
-    this.Socket.close();
-  }
+  ref(){ this.Socket.ref() }
+  unref(){ this.Socket.unref() }
+  close(){ this.Socket.close() }
 }
 Commands.forEach(function(Entry){
   let Execute = function(){
     Array.prototype.unshift.call(arguments, Entry);
+    let Callback = null;
+    if(typeof arguments[arguments.length - 1] === 'function'){
+      Callback = Array.prototype.pop.call(arguments);
+    }
     let Encoded = RedisProto.Encode(arguments);
     let Me = this;
-    return new Promise(function(Resolve, Reject){
+    let MyPromise = new Promise(function(Resolve, Reject){
       Me.Socket.write(Encoded + "\r\n", 'utf8', function(){
         Me.Expecting = [Resolve, Reject];
       });
     });
+    if(Callback === null){
+      return MyPromise;
+    } else {
+      MyPromise.then(function(){
+        Callback(null, arguments);
+      }, function(Error){
+        Callback(Error, null);
+      });
+    }
   };
   Redis.prototype[Entry] = Execute;
   Redis.prototype[Entry.toLowerCase()] = Execute;
 });
 
 Redis.prototype.end = Redis.prototype.close;
-
 module.exports = Redis;
