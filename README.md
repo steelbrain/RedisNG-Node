@@ -1,6 +1,6 @@
 RedisNG
 ===========
-RedisNG is an extremely lightweight yet full feature Redis client for Node.js
+RedisNG is an extremely lightweight yet full featured Redis client for Node.js
 
 #### Installation
 ```bash
