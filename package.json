@@ -2,11 +2,14 @@
   "name": "redis-promise",
   "version": "0.1.0",
   "description": "A tiny but fully functional Promise based Redis Client for NodeJS",
-  "main": "Main.js",
+  "main": "lib/main.js",
   "dependencies": {
-    "redis-proto": "latest"
+    "redis-proto": "^2.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "sb-stream-promise": "^1.0.0",
+    "babel-preset-steelbrain": "^1.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
