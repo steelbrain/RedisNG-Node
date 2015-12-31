@@ -48,7 +48,9 @@ const commandsLength = Commands.length
 for (let i = 0; i < commandsLength; ++i) {
   const command = Commands[i]
   const callback = function() {
-    const request = encode(Array.prototype.slice.call(arguments).unshift(command))
+    const parameters = Array.prototype.slice.call(arguments)
+    parameters.unshift(command)
+    const request = encode(parameters)
     return new Promise(resolve => {
       this.queue.push(resolve)
       this.socket.write(request)
