@@ -1,0 +1,5 @@
+lib
+decls
+node_modules
+spec/fixtures
+vendor/commands.js

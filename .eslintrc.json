@@ -1,0 +1,6 @@
+{
+  "extends": "steelbrain",
+  "rules": {
+    "no-param-reassign": "off"
+  }
+}

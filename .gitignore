@@ -1,3 +1,5 @@
+/node_modules
 .idea
-/Dist/
-node_modules
+/lib
+.DS_Store
+*.log
