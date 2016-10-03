@@ -9,17 +9,16 @@ npm install --save redisng
 
 #### Usage
 ```js
-'use babel'
 
-import {RedisNG} from 'redisng'
+import Redis from 'redisng'
 
-const redis = new RedisNG()
+const redis = new Redis()
 redis.connect().then(function() {
   return redis.set('KEY', 'VALUE').then(function() {
     return redis.get('KEY')
   }).then(function(result) {
     console.log(result)
-    redis.unref()
+    redis.close()
   })
 }, function(e) {
   console.log(e.message, e.stack)
@@ -32,8 +31,8 @@ redis.connect().then(function() {
 class Redis extends EventEmitter{
   connect(host, port): Promise
   ref(): void
-  unref(): void // graceful shutdown
-  close(): void // terminate
+  unref(): void
+  close(): void
 
   get(key): Promise<string>
   set(key, value): Promise<string>

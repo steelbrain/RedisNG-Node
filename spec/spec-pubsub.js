@@ -1,5 +1,3 @@
-'use strict'
-
 const RedisNG = require('../').RedisNG
 
 const redis = new RedisNG()

@@ -1,12 +1,14 @@
-'use babel'
+/* @flow */
 
-import {Socket} from 'net'
-import {EventEmitter} from 'events'
-import {encode, decodeGen} from 'redis-proto'
+import { Socket } from 'net'
+import EventEmitter from 'events'
+import { decodeGen } from 'redis-proto'
+import { injectInto } from './helpers'
 
-const Commands = require('../vendor/commands')
+class RedisNG extends EventEmitter {
+  queue: Array<Function>;
+  socket: Socket;
 
-export class RedisNG extends EventEmitter {
   constructor() {
     super()
 
@@ -14,10 +16,9 @@ export class RedisNG extends EventEmitter {
     this.socket = new Socket()
     this.socket.on('data', buffer => {
       let queueLength = this.queue.length
-      for (let message of decodeGen(buffer)) {
+      for (const message of decodeGen(buffer)) {
         if (queueLength) {
-          const queueItem = this.queue.shift()
-          queueItem(message)
+          this.queue.shift()(message)
           queueLength--
         } else if (message.length === 3 && message[0] === 'message') {
           // Channel broadcast
@@ -27,9 +28,13 @@ export class RedisNG extends EventEmitter {
       }
     })
   }
-  connect(host = '127.0.0.1', port = 6379) {
+  connect(host: string = '127.0.0.1', port: number = 6379) {
     return new Promise((resolve, reject) => {
-      this.socket.connect(port, host, resolve).on('error', reject)
+      this.socket.on('error', reject)
+      this.socket.connect({ port, host }, () => {
+        this.socket.removeListener('error', reject)
+        resolve()
+      })
     })
   }
   ref() {
@@ -39,23 +44,10 @@ export class RedisNG extends EventEmitter {
     this.socket.unref()
   }
   close() {
-    // Terminate
-    this.socket.close()
+    this.socket.end()
   }
 }
 
-const commandsLength = Commands.length
-for (let i = 0; i < commandsLength; ++i) {
-  const command = Commands[i]
-  const callback = function() {
-    const parameters = Array.prototype.slice.call(arguments)
-    parameters.unshift(command)
-    const request = encode(parameters)
-    return new Promise(resolve => {
-      this.queue.push(resolve)
-      this.socket.write(request)
-    })
-  }
-  RedisNG.prototype[command] = callback
-  RedisNG.prototype[command.toLowerCase()] = callback
-}
+injectInto(RedisNG)
+
+module.exports = RedisNG
