@@ -1,4 +1,6 @@
-const RedisNG = require('../').RedisNG
+/* @flow */
+
+import RedisNG from '../src'
 
 const redis = new RedisNG()
 redis.connect().then(function() {

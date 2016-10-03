@@ -2,7 +2,7 @@
   "name": "redisng",
   "version": "1.0.1",
   "description": "A lightweight but fully functional Promise based Redis Client for NodeJS",
-  "main": "lib/main.js",
+  "main": "lib/index.js",
   "dependencies": {
     "redis-proto": "^2.0.0"
   },
