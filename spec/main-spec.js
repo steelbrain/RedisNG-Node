@@ -1,17 +1,41 @@
 /* @flow */
 
-import RedisNG from '../src'
+import { it, wait } from 'jasmine-fix'
+import Redis from '../'
 
-const redis = new RedisNG()
-redis.connect().then(function() {
-  console.log('connected')
-  return redis.set('KEY', 'VALUE').then(function() {
-    console.log('value set')
-    return redis.get('KEY')
-  }).then(function(result) {
-    console.log(result === 'VALUE' ? 'result matches' : 'result mismatches')
-    redis.unref()
+describe('Redis', function() {
+  it('works with commands', async function() {
+    const redis = new Redis()
+    await redis.connect()
+    await redis.set('KEY', 'VALUE')
+    expect(await redis.get('KEY')).toBe('VALUE')
   })
-}, function(e) {
-  console.log(e.message, e.stack)
+  it('has working pubsub support', async function() {
+    let timesGlobal = 0
+    let timesScoped = 0
+
+    const redis = new Redis()
+    const publisher = new Redis()
+    redis.on('message', function(channel, message) {
+      expect(channel).toBe('CHAN')
+      expect(message).toBe('FOOOD')
+      timesGlobal++
+    })
+    redis.on('message:CHAN', function(message) {
+      expect(message).toBe('FOOOD')
+      timesScoped++
+    })
+
+    await redis.connect()
+    await publisher.connect()
+    await redis.subscribe('CHAN')
+    await publisher.publish('CHAN', 'FOOOD')
+    await wait(50)
+
+    expect(timesGlobal).toBe(1)
+    expect(timesScoped).toBe(1)
+
+    redis.close()
+    publisher.close()
+  })
 })
