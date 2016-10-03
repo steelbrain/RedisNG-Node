@@ -1,17 +1,21 @@
 {
   "name": "redisng",
   "version": "1.0.1",
-  "description": "A tiny but fully functional Promise based Redis Client for NodeJS",
+  "description": "A lightweight but fully functional Promise based Redis Client for NodeJS",
   "main": "lib/main.js",
   "dependencies": {
     "redis-proto": "^2.0.0"
   },
   "devDependencies": {
-    "sb-stream-promise": "^1.0.0",
-    "babel-preset-steelbrain": "^1.0.0"
+    "babel-cli": "^6.10.1",
+    "babel-preset-steelbrain": "^4.0.1",
+    "eslint-config-steelbrain": "^1.0.4",
+    "flow-bin": "^0.32.0",
+    "jasmine-fix": "^1.0.1",
+    "sb-stream-promise": "^1.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "apm test"
   },
   "repository": {
     "type": "git",
