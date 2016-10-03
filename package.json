@@ -1,6 +1,6 @@
 {
   "name": "redisng",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A lightweight but fully functional Promise based Redis Client for NodeJS",
   "main": "lib/index.js",
   "dependencies": {
