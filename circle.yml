@@ -3,9 +3,7 @@ dependencies:
     - curl -L https://git.io/vPmPy | sh # Install Atom
     - curl -L https://git.io/vPm1l | sh # Install Redis
     - curl -L https://git.io/vPm1q | sh # Debug Versions
-    - npm prune
-    - npm install
-    - npm run compile
+    - curl -L https://git.io/vPZfC | sh # NPM Install
 
 test:
   override:
