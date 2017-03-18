@@ -8,11 +8,11 @@
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
-    "babel-preset-steelbrain": "^4.0.1",
-    "eslint-config-steelbrain": "^1.0.4",
-    "flow-bin": "^0.32.0",
+    "babel-preset-steelbrain": "^5.0.2",
+    "eslint-config-steelbrain": "^2.0.0",
+    "flow-bin": "^0.42.0",
     "jasmine-fix": "^1.0.1",
-    "sb-stream-promise": "^1.0.0"
+    "sb-stream-promise": "^2.0.0"
   },
   "scripts": {
     "lint": "(flow check) && (eslint .)",
