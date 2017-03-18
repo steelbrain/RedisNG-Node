@@ -1,5 +1,7 @@
 RedisNG
 ===========
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/steelbrain/RedisNG-Node.svg)](https://greenkeeper.io/)
 RedisNG is an extremely lightweight yet full featured Redis client for Node.js
 
 #### Installation
