@@ -14,7 +14,7 @@ class RedisNG extends EventEmitter {
 
     this.queue = []
     this.socket = new Socket()
-    this.socket.on('data', buffer => {
+    this.socket.on('data', (buffer) => {
       let queueLength = this.queue.length
       for (const message of decodeGen(buffer)) {
         if (queueLength) {

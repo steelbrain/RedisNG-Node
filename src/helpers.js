@@ -11,7 +11,7 @@ export function injectInto(RedisNG: Object): void {
     const callback = function(...parameters) {
       parameters.unshift(command)
       const request = encode(parameters)
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         this.queue.push(resolve)
         this.socket.write(request)
       })
